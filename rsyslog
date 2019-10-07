@@ -1,0 +1,65 @@
+# ###
+# Rotate at size of 10MB when checked hourly or daily.
+#
+# Note that /var/log/lastlog isn't included in the rotation scheme as it is
+# a sparse file that really isn't as large as it appears in  "ls".
+# $ ls -lh lastlog
+# -rw-rw-r-- 1 root utmp 12M May 16 15:15 lastlog
+# $ du -h lastlog
+# 521K    lastlog
+#
+# ###
+# Commented out separate syslog entry and moved it with the others.
+#/var/log/syslog
+#{
+#       rotate 7
+#       daily
+#       missingok
+#       notifempty
+#       delaycompress
+#       compress
+#       postrotate
+#               invoke-rc.d rsyslog rotate > /dev/null
+#       endscript
+#}
+#
+# Added /var/log/syslog to the below list after commenting out the separate
+# entry above.
+/var/log/syslog
+/var/log/mail.info
+/var/log/mail.warn
+/var/log/mail.err
+/var/log/mail.log
+/var/log/daemon.log
+/var/log/kern.log
+/var/log/auth.log
+/var/log/user.log
+/var/log/lpr.log
+/var/log/cron.log
+/var/log/debug
+/var/log/messages
+{
+#       rotate 4
+#       weekly
+#
+# ###
+# Keep 28 logs instead of 4 weekly copies of the logs. This is likely to be 28
+# daily copies, but if maxsize is exceeded, it could be 28 hourly copies if
+# logrotate is called hourly.  This number of copies will give us coverage over
+# 24 hours so if something is going wrong there is an opportunity to see a log
+# file at the start, and also cover both sides of the planned two week MMO
+# power cycle.
+        rotate 28
+        daily
+# Rotate now if maxsize exceeded
+        maxsize 10M
+        missingok
+        notifempty
+        compress
+# Do not delay compression of a rotated log, as they can get big really fast.
+#       delaycompress
+        sharedscripts
+        postrotate
+                invoke-rc.d rsyslog rotate > /dev/null
+        endscript
+}
