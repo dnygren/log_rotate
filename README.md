@@ -5,7 +5,7 @@ Perform hourly checks of log sizes, hourly rotation if a certain size exceeded, 
 daily rotation if not. Do not exceed 28 copies of any log file.
 
 <pre>
-nygren@mmo-proc:/var/log$ cat /etc/crontab
+nygren@server-1:/var/log$ cat /etc/crontab
 # /etc/crontab: system-wide crontab
 # Unlike any other crontab you don't have to run the `crontab'
 # command to install the new version when you edit this file
@@ -24,7 +24,7 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 </pre>
 (No change by me. Just shows Debian hourly cron jobs run at 17 minutes past the hour)
 <pre>
-nygren@mmo-proc:/etc/cron.daily$ ls -la
+nygren@server-1:/etc/cron.daily$ ls -la
 total 79
 drwxr-xr-x   2 root root   14 May  9 09:52 .
 drwxr-xr-x 128 root root  251 May 17 06:04 ..
@@ -41,15 +41,15 @@ drwxr-xr-x 128 root root  251 May 17 06:04 ..
 -rw-r--r--   1 root root  102 May  3  2015 .placeholder
 -rwxr-xr-x   1 root root  441 May 25  2017 sysstat
 
-nygren@mmo-proc:/etc/cron.daily$ cat logrotate
+nygren@server-1:/etc/cron.daily$ cat logrotate
 #!/bin/sh
 
 test -x /usr/sbin/logrotate || exit 0
 /usr/sbin/logrotate /etc/logrotate.conf
 
-nygren@mmo-proc:/etc/cron.daily$ cd ..
-nygren@mmo-proc:/etc$ cd cron.hourly
-nygren@mmo-proc:/etc/cron.hourly$ ls -la
+nygren@server-1:/etc/cron.daily$ cd ..
+nygren@server-1:/etc$ cd cron.hourly
+nygren@server-1:/etc/cron.hourly$ ls -la
 total 22
 drwxr-xr-x   2 root root   3 May  9 09:52 .
 drwxr-xr-x 128 root root 251 May 17 06:04 ..
@@ -58,13 +58,13 @@ drwxr-xr-x 128 root root 251 May 17 06:04 ..
 </pre>
 ( Move logrotate from /etc/cron.daily to /etc/cron.hourly )
 <pre>
-nygren@mmo-proc:/etc/cron.hourly$ cd ..
-nygren@mmo-proc:/etc$ cd cron.daily
-nygren@mmo-proc:/etc/cron.daily$ sudo mv logrotate ../cron.hourly/logrotate
+nygren@server-1:/etc/cron.hourly$ cd ..
+nygren@server-1:/etc$ cd cron.daily
+nygren@server-1:/etc/cron.daily$ sudo mv logrotate ../cron.hourly/logrotate
 [sudo] password for nygren:
 
-nygren@mmo-proc:/etc$ cd ../cron.hourly
-nygren@mmo-proc:/etc/cron.hourly$ ls -la
+nygren@server-1:/etc$ cd ../cron.hourly
+nygren@server-1:/etc/cron.hourly$ ls -la
 total 26
 drwxr-xr-x   2 root root   4 May 17 17:22 .
 drwxr-xr-x 128 root root 251 May 17 17:22 ..
@@ -73,7 +73,7 @@ drwxr-xr-x 128 root root 251 May 17 17:22 ..
 </pre>
 ( No changes to /etc/logrotate.conf , but shown here as it calls files in /etc/logrotate.d)
 <pre>
-nygren@mmo-proc:/etc$ cat logrotate.conf
+nygren@server-1:/etc$ cat logrotate.conf
 # see "man logrotate" for details
 # rotate log files weekly
 weekly

@@ -1,5 +1,5 @@
 # ###
-# Rotate at size of 10MB when checked hourly or daily.
+# Rotate at a size of 10MB when checked hourly or daily.
 #
 # Note that /var/log/lastlog isn't included in the rotation scheme as it is
 # a sparse file that really isn't as large as it appears in  "ls".
@@ -47,7 +47,7 @@
 # daily copies, but if maxsize is exceeded, it could be 28 hourly copies if
 # logrotate is called hourly.  This number of copies will give us coverage over
 # 24 hours so if something is going wrong there is an opportunity to see a log
-# file at the start, and also cover both sides of the planned two week MMO
+# file at the start, and also cover both sides of the planned two week
 # power cycle.
         rotate 28
         daily
