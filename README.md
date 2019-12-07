@@ -1,8 +1,18 @@
-# log_rotate
-Rotate and compress log files to avoid running out of storage. 
+# Rotate and compress rsyslogd log files
 
-Perform hourly checks of log sizes, hourly rotation if a certain size exceeded, and
-daily rotation if not. Do not exceed 28 copies of any log file.
+## Mission Statement
+To avoid running out of storage due to a process writing too much data to a log
+file, perform hourly checks of log sizes, perform hourly rotation if a certain
+size exceeded, and a daily rotation if not. Do not exceed 28 copies of any log
+file.
+
+## Background
+logrotate is a shell script in /etc/cron.[daily|hourly|monthly] that is called
+by cron. The logrotate shell script calls the binary /usr/sbin/logrotate which
+uses the /etc/logrotate.conf config file which is set to call files in the
+/etc/logrotate.d directory. /etc/logrorate/rsyslog is a file in that directory
+that lists the rsyslogd log files that are to be rotated according to the
+commands that follow the log file names.
 
 <pre>
 nygren@server-1:/var/log$ cat /etc/crontab
@@ -71,7 +81,8 @@ drwxr-xr-x 128 root root 251 May 17 17:22 ..
 -rwxr-xr-x   1 root root  89 May  5  2015 logrotate
 -rw-r--r--   1 root root 102 May  3  2015 .placeholder
 </pre>
-( No changes to /etc/logrotate.conf , but shown here as it calls files in /etc/logrotate.d)
+( No changes to /etc/logrotate.conf , but shown here as it calls files in
+ /etc/logrotate.d )
 <pre>
 nygren@server-1:/etc$ cat logrotate.conf
 # see "man logrotate" for details
@@ -171,8 +182,9 @@ include /etc/logrotate.d
 #       delaycompress
         sharedscripts
         postrotate
+# Force rsyslog to reopen the files it is logging to so it doesn't keep writing
+# to a log file that was rotated away.
                 invoke-rc.d rsyslog rotate > /dev/null
         endscript
 }
 </pre>
-

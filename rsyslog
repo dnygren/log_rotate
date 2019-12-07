@@ -60,6 +60,8 @@
 #       delaycompress
         sharedscripts
         postrotate
+# Force rsyslog to reopen the files it is logging to so it doesn't keep writing
+# to a log file that was rotated away.
                 invoke-rc.d rsyslog rotate > /dev/null
         endscript
 }
